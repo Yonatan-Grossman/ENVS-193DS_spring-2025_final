@@ -5,7 +5,7 @@
     "type": "quarto_markdown",
     "hash": "2780769960",
     "contents": "",
-    "dirty": false,
+    "dirty": true,
     "created": 1749503178191.0,
     "source_on_save": false,
     "relative_order": 1,
@@ -17,7 +17,7 @@
         "Source": "Source",
         "docOutlineVisible": "1",
         "rmdVisualCollapsedChunks": "",
-        "cursorPosition": "31,0",
+        "cursorPosition": "25,0",
         "scrollLine": "22",
         "rmdVisualModeLocation": "2:0"
     },
