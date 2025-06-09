@@ -1,8 +1,14 @@
----
-title: "193DS_spring_2025_final"
----
+Version: 1.0
+ProjectId: b5c7c17f-6fff-4af9-9c17-5bcb9545d979
 
-https://github.com/Yonatan-Grossman/ENVS-193DS_spring-2025_final
+RestoreWorkspace: No
+SaveWorkspace: No
+AlwaysSaveHistory: Default
 
-# Problem 1
+EnableCodeIndexing: Yes
+UseSpacesForTab: Yes
+NumSpacesForTab: 2
+Encoding: UTF-8
 
+RnwWeave: Sweave
+LaTeX: pdfLaTeX
