@@ -32,6 +32,8 @@ library(tidyverse)
 
 ```{r}
 
-sst <- read.csv("SST_update2023.csv")
+sst <- read.csv("data/SST_update2023.csv")
 
+sst_clean <- sst %>% 
+  clean_names %>%
 ```
