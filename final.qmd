@@ -40,5 +40,11 @@ sst_clean <- sst %>%
   mutate(
     year = year(date),
     month = month(date, label = TRUE, abbr = TRUE)) %>% 
-  filter(year > 2018)
+  filter(year > 2017) %>% 
+  mutate(year = factor(year)) %>% 
+  group_by(year, month) %>% 
+  summarize(
+    mean_monthly_sst = mean(temp, na.rm = TRUE),
+    .groups = "drop"
+  )
 ```
