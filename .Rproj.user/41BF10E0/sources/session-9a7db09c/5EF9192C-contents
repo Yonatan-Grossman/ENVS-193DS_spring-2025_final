@@ -27,6 +27,7 @@ We also found a \[+/-, strength\] correlation between distance from headwater (k
 ```{r}
 
 library(tidyverse)
+library(janitor)
 
 ```
 
@@ -34,6 +35,10 @@ library(tidyverse)
 
 sst <- read.csv("data/SST_update2023.csv")
 
-sst_clean <- sst %>% 
-  clean_names %>%
+sst_clean <- sst %>%
+  clean_names() %>%
+  mutate(
+    year = year(date),
+    month = month(date, label = TRUE, abbr = TRUE)) %>% 
+  filter(year > 2018)
 ```
