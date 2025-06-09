@@ -47,4 +47,16 @@ sst_clean <- sst %>%
     mean_monthly_sst = mean(temp, na.rm = TRUE),
     .groups = "drop"
   )
+
+
+ggplot(sst_clean,
+       aes(x = month, 
+           y = mean_monthly_sst,
+           color = year,
+           group = year))+
+  geom_line() + 
+  geom_point() +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ```
+
