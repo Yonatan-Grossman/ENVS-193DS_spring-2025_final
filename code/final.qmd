@@ -28,7 +28,7 @@ We also found a \[+/-, strength\] correlation between distance from headwater (k
 
 library(tidyverse)
 library(janitor)
-
+library(scales)
 ```
 
 
@@ -49,6 +49,12 @@ sst_clean <- sst %>%
     .groups = "drop"
   )
 
+year_levels <- levels(sst_clean$year)
+n_years <- length(year_levels)
+
+colors <- gradient_n_pal(c("#E0B0FF", "#4B006B"))(seq(0, 1, length.out = n_years))
+names(colors) <- year_levels
+
 
 ggplot(sst_clean,
        aes(x = month, 
@@ -62,6 +68,7 @@ ggplot(sst_clean,
   xlab("Month") +
   ylab("Mean monthly sea surface temperature (°C)") +
   theme(legend.position = c(0.1, 0.7)) +
-  labs(color= "Year")
+  labs(color= "Year") +
+  scale_color_manual(values = colors)
 ```
 
