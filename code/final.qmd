@@ -20,6 +20,7 @@ We found a statistically significant difference between average nitrogen load (k
 
 We also found a \[+/-, strength\] correlation between distance from headwater (km) and annual total nitrogen load (kg year\^-1) (Pearson's r(df) = correlation coefficient, p=0.02 α = significance level)
 
+
 # Problem 2.
 
 ### a.
@@ -72,3 +73,16 @@ ggplot(sst_clean, #data frame
   scale_color_manual(values = colors) #changing the colors to the gradient
 ```
 
+# Problem 3
+
+### a.
+
+```{r}
+nest_boxes <- read.csv("../data/occdist.csv")
+```
+
+The 1s and 0s are basically saying if the bird in that column used the box or not, so for the column labeled sp a 1 means a swift parrot used the box while a 0 means another species used the box/the box was empty, and for the cs column a 1 means a common starling used the box while a 0 means a common starling did not use the box
+
+### b.
+
+this study is talking about nest boxes as a conservation tool, and while the common starling and the tree martin are both common animals, the swift parrot is critically endangered and therefor is actually in need of the nest boxes to help it. The boxes are also specifically designed to be the most useful for the parrots as the parrots are very selective about where they nest and the boxes were designed with the parrots' preferred parameters in mind.
