@@ -26,7 +26,7 @@ We also found a \[+/-, strength\] correlation between distance from headwater (k
 
 ```{r}
 
-library(tidyverse)
+library(tidyverse) #loading in packages
 library(janitor)
 library(scales)
 ```
@@ -34,41 +34,41 @@ library(scales)
 
 ```{r}
 
-sst <- read.csv("../data/SST_update2023.csv")
+sst <- read.csv("../data/SST_update2023.csv") #read in the data
 
 sst_clean <- sst %>%
-  clean_names() %>%
+  clean_names() %>% #cleaning the data names
   mutate(
-    year = year(date),
-    month = month(date, label = TRUE, abbr = TRUE)) %>% 
-  filter(year > 2017) %>% 
-  mutate(year = factor(year)) %>% 
-  group_by(year, month) %>% 
+    year = year(date), #adding a year column with the year based on the date column
+    month = month(date, label = TRUE, abbr = TRUE)) %>% #adding a month column based on the month in the date column (and turning it into the actual words for those months instead of just the numbers)
+  filter(year > 2017) %>% #use only years after 2017
+  mutate(year = factor(year)) %>% #turn year into a factor
+  group_by(year, month) %>% #group by the month and the year
   summarize(
-    mean_monthly_sst = mean(temp, na.rm = TRUE),
+    mean_monthly_sst = mean(temp, na.rm = TRUE), #find the mean of each month in each year and add it to a new column
     .groups = "drop"
   )
 
-year_levels <- levels(sst_clean$year)
-n_years <- length(year_levels)
+year_levels <- levels(sst_clean$year) #making a new object that's the levels from the year column
+n_years <- length(year_levels) #another object that's just the length of year_level
 
-colors <- gradient_n_pal(c("#E0B0FF", "#4B006B"))(seq(0, 1, length.out = n_years))
+colors <- gradient_n_pal(c("#E0B0FF", "#4B006B"))(seq(0, 1, length.out = n_years)) #an object called colors that makes there be a gradient n levels long from the first color to the second color, where n is the number of levels in years
 names(colors) <- year_levels
 
 
-ggplot(sst_clean,
-       aes(x = month, 
+ggplot(sst_clean, #data frame
+       aes(x = month, #axis assignment
            y = mean_monthly_sst,
-           color = year,
-           group = year))+
-  geom_line() + 
-  geom_point() +
-  theme_bw() +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  xlab("Month") +
+           color = year, #color by year
+           group = year))+ #group by year
+  geom_line() + #add a line graph
+  geom_point() + #add a point graph
+  theme_bw() + #bw theme
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + #removing the gridlines
+  xlab("Month") + #labeling the axis
   ylab("Mean monthly sea surface temperature (°C)") +
-  theme(legend.position = c(0.1, 0.7)) +
-  labs(color= "Year") +
-  scale_color_manual(values = colors)
+  theme(legend.position = c(0.1, 0.7)) + #changing the legend position
+  labs(color = "Year") + #changing legend title
+  scale_color_manual(values = colors) #changing the colors to the gradient
 ```
 
