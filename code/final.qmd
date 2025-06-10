@@ -200,15 +200,19 @@ ggplot(nest_boxes,
        aes(x = edge.distance,
            y = predicted.sp,
            color = season)) +
-  geom_line(size = 1.25) +
+  geom_line() +
+  geom_point(aes(y = sp, color = season, shape = season)) +
   geom_ribbon(aes(ymin=ci.lower, ymax=ci.upper, fill = season), alpha=0.2) +
-  scale_color_manual(values = c("2016" = "darkgreen", "2019" = "navy")) +
-  scale_fill_manual(values = c("2016" = "green", "2019" = "cornflowerblue")) +
+  scale_color_manual(values = c("2016" = "green", "2019" = "navy")) +
+  scale_fill_manual(values = c("2016" = "darkgreen", "2019" = "cornflowerblue")) +
+  scale_shape_manual(values = c("2016" = 17, "2019" = 19)) +
   xlab("Distance from edge of the forest (m)") +
   ylab("Probability that a box is occupied by a swift parrot") +
   theme_bw() +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
   theme(legend.position = c(0.8, 0.7)) +
-  labs(color = "Season", fill = "Season")
+  labs(color = "Season", fill = "Season", shape = "Season")
 ```
-
+### i.
+**Figure 1: Swift Parrot Nest Box Occupancy Probability by Distance from Forest Edge (2016 vs. 2019)**
+Data source: https://doi.org/10.5061/dryad.83bk3j9sb
