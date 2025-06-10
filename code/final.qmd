@@ -175,7 +175,23 @@ The best model as determined by Akaike's Information Criterion (AIC) was the sat
 ### h.
 
 ```{r}
-data_vizualize <- nest_boxes %>% 
-  
+nest_boxes$predicted.sp <- predict(model1, type = "response")
+
+nest_boxes$season <- as.factor(nest_boxes$season)
+
+
+ci_lower <- ci(nest_boxes$predicted.sp)[2]
+ci_upper <- ci(nest_boxes$predicted.sp)[3]
+
+ggplot(nest_boxes,
+       aes(x = edge.distance,
+           y = predicted.sp,
+           color = season)) +
+  geom_line() +
+  geom_ribbon(
+    aes
+    (ymin=ci_lower,
+      ymax=ci_upper),
+    fill="blue", alpha=0.2)
 ```
 
