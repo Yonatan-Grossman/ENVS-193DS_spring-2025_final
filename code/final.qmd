@@ -30,6 +30,8 @@ We also found a \[+/-, strength\] correlation between distance from headwater (k
 library(tidyverse) #loading in packages
 library(janitor)
 library(scales)
+library(DHARMa)
+library(MuMIn)
 ```
 
 
@@ -140,6 +142,9 @@ model3 <- glm(
 )
 ```
 
+
+### f.
+
 ```{r fig.width=6, fig.height=5}
 
 res0 <- simulateResiduals(model0)
@@ -152,5 +157,25 @@ plot(res0)
 plot(res1)
 plot(res2)
 plot(res3)
+```
+
+### g.
+
+```{r}
+AICc(
+  model0,
+  model1,
+  model2,
+  model3
+) |> 
+  arrange(AICc)
+```
+The best model as determined by Akaike's Information Criterion (AIC) was the saturated model, which used both season and distance to forest edge as the predictors (AICc 226.3133)
+
+### h.
+
+```{r}
+data_vizualize <- nest_boxes %>% 
+  
 ```
 
