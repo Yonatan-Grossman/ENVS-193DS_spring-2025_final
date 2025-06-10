@@ -178,30 +178,31 @@ The best model as determined by Akaike's Information Criterion (AIC) was the sat
 ### h.
 
 ```{r}
-nest_boxes$predicted.sp <- predict(model1, type = "response")
+graph_prediction <- expand.grid(edge.distance = seq(0, 1200, by = 1), season = unique(nest_boxes$season))
 
-predictions <- predict(model1, newdata = nest_boxes, type = "link", se.fit = TRUE)
+
+predictions <- predict(model1, newdata = graph_prediction, type = "link", se.fit = TRUE)
 
 fit <- predictions$fit
 se <- predictions$se.fit
 
-nest_boxes$fit <- fit
-nest_boxes$ci_lower_pre <- fit - 1.96 * se
-nest_boxes$ci_upper_pre <- fit + 1.96 * se
+graph_prediction$fit <- fit
+graph_prediction$ci_lower_pre <- fit - 1.96 * se
+graph_prediction$ci_upper_pre <- fit + 1.96 * se
 
 
-nest_boxes$predicted.sp <- plogis(fit)
-nest_boxes$ci.lower <- plogis(nest_boxes$ci_lower_pre)
-nest_boxes$ci.upper <- plogis(nest_boxes$ci_upper_pre)
+graph_prediction$predicted.sp <- plogis(fit)
+graph_prediction$ci.lower <- plogis(graph_prediction$ci_lower_pre)
+graph_prediction$ci.upper <- plogis(graph_prediction$ci_upper_pre)
 
 
 
-ggplot(nest_boxes,
+ggplot(graph_prediction,
        aes(x = edge.distance,
            y = predicted.sp,
            color = season)) +
-  geom_line() +
-  geom_jitter(aes(y = sp, color = season, shape = season), height = .05, width = 0) +
+  geom_line(size = 1.2) +
+  geom_jitter(data = nest_boxes, aes(y = sp, color = season, shape = season), height = .04, width = 0) +
   geom_ribbon(aes(ymin=ci.lower, ymax=ci.upper, fill = season), alpha=0.2) +
   scale_color_manual(values = c("2016" = "green2", "2019" = "navy")) +
   scale_fill_manual(values = c("2016" = "darkgreen", "2019" = "cornflowerblue")) +
@@ -214,7 +215,29 @@ ggplot(nest_boxes,
   labs(color = "Season", fill = "Season", shape = "Season")
 ```
 ### i.
+
 **Figure 1: Swift Parrot Nest Box Occupancy Probability by Distance from Forest Edge (2016 vs. 2019)**
-Data source: https://doi.org/10.5061/dryad.83bk3j9sb
+Data source: https://doi.org/10.5061/dryad.83bk3j9sb.
 The lines are the estimated probability of swift parrot occupancy in nest boxes as a function of distance from the forest edge, comparing data from the 2016 and 2019 breeding seasons. Shaded ribbons represent 95% confidence intervals around model predictions, and colors represent the season (green: 2016 season, blue: 2019 season)
-Points represent actual observations of swift parrots inhabiting the nest boxes as a binary categorical response variable compared to distance from the forest edge. The points are jittered on the y-axis for visibility but fixed on the x-axis for accuracy. Colors and shapes representing the seasons (green triangles: 2016 season, blue circles: 2019 season). 
+Points represent actual observations of swift parrots inhabiting the nest boxes as a binary categorical response variable compared to distance from the forest edge. The points are jittered on the y-axis for visibility but fixed on the x-axis for accuracy. Colors and shapes representing the seasons (green triangles: 2016 season, blue circles: 2019 season).
+
+### j.
+
+```{r}
+edge_calculation <- expand.grid(edge.distance = c(0, 900), season = c("2016", "2019"))
+
+predictions2 <- predict(model1, newdata = edge_calculation, type = "link", se.fit = TRUE)
+
+fit2 <- predictions2$fit
+se2 <- predictions2$se.fit
+
+
+edge_calculation$predicted_prob <- plogis(fit2)
+edge_calculation$ci_lower <- plogis(fit2 - 1.96 * se2)
+edge_calculation$ci_upper <- plogis(fit2 + 1.96 * se2)
+
+edge_calculation
+```
+
+### k.
+
