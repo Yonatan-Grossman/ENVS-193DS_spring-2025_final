@@ -201,9 +201,9 @@ ggplot(nest_boxes,
            y = predicted.sp,
            color = season)) +
   geom_line() +
-  geom_point(aes(y = sp, color = season, shape = season)) +
+  geom_jitter(aes(y = sp, color = season, shape = season), height = .05, width = 0) +
   geom_ribbon(aes(ymin=ci.lower, ymax=ci.upper, fill = season), alpha=0.2) +
-  scale_color_manual(values = c("2016" = "green", "2019" = "navy")) +
+  scale_color_manual(values = c("2016" = "green2", "2019" = "navy")) +
   scale_fill_manual(values = c("2016" = "darkgreen", "2019" = "cornflowerblue")) +
   scale_shape_manual(values = c("2016" = 17, "2019" = 19)) +
   xlab("Distance from edge of the forest (m)") +
@@ -216,3 +216,5 @@ ggplot(nest_boxes,
 ### i.
 **Figure 1: Swift Parrot Nest Box Occupancy Probability by Distance from Forest Edge (2016 vs. 2019)**
 Data source: https://doi.org/10.5061/dryad.83bk3j9sb
+The lines are the estimated probability of swift parrot occupancy in nest boxes as a function of distance from the forest edge, comparing data from the 2016 and 2019 breeding seasons. Shaded ribbons represent 95% confidence intervals around model predictions, and colors represent the season (green: 2016 season, blue: 2019 season)
+Points represent actual observations of swift parrots inhabiting the nest boxes as a binary categorical response variable compared to distance from the forest edge. The points are jittered on the y-axis for visibility but fixed on the x-axis for accuracy. Colors and shapes representing the seasons (green triangles: 2016 season, blue circles: 2019 season). 
