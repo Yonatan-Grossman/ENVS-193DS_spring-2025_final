@@ -50,12 +50,19 @@ sst_clean <- sst %>%
     .groups = "drop"
   )
 
+
+slice_sample(sst_clean, n = 5) #show 5 rows from the dataframe
+str(sst_clean) #shows the structure of the dataframe
+```
+
+### b.
+
+```{r}
 year_levels <- levels(sst_clean$year) #making a new object that's the levels from the year column
 n_years <- length(year_levels) #another object that's just the length of year_level
 
 colors <- gradient_n_pal(c("#E0B0FF", "#4B006B"))(seq(0, 1, length.out = n_years)) #an object called colors that makes there be a gradient n levels long from the first color to the second color, where n is the number of levels in years
 names(colors) <- year_levels
-
 
 ggplot(sst_clean, #data frame
        aes(x = month, #axis assignment
@@ -86,3 +93,9 @@ The 1s and 0s are basically saying if the bird in that column used the box or no
 ### b.
 
 this study is talking about nest boxes as a conservation tool, and while the common starling and the tree martin are both common animals, the swift parrot is critically endangered and therefor is actually in need of the nest boxes to help it. The boxes are also specifically designed to be the most useful for the parrots as the parrots are very selective about where they nest and the boxes were designed with the parrots' preferred parameters in mind.
+
+### c.
+Season in this case refers to the summer breeding seasons of 2016 and 2019. The main difference is that the boxes were set up in 2016 before the breeding season and then left there, so in the 2019 breeding season the boxes were already there.
+
+### d.
+
