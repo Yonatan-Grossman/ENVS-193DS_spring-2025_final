@@ -99,3 +99,13 @@ Season in this case refers to the summer breeding seasons of 2016 and 2019. The 
 
 ### d.
 
+```{r}
+table <- data.frame(
+  model.number = c(1, 2, 3, 4),
+  season = c("", "X", "X", ""),
+  distance.to.forest.edge = c("", "X", "", "X"),
+  model.description = c("no predictors (null model)", "all predictors (saturated model)", "only season as predictor", "only distance to forest edge as predictor"))
+  
+table
+```
+
