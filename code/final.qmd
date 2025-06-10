@@ -109,3 +109,48 @@ table <- data.frame(
 table
 ```
 
+### e.
+
+```{r}
+model0 <- glm(
+  sp ~ 1,
+  data = nest_boxes,
+  family = binomial
+)
+
+
+model1 <- glm(
+  sp ~ edge.distance + season,
+  data = nest_boxes,
+  family = binomial
+)
+
+
+model2 <- glm(
+  sp ~ season,
+  data = nest_boxes,
+  family = binomial
+)
+
+
+model3 <- glm(
+  sp ~ edge.distance, 
+  data = nest_boxes,
+  family = binomial
+)
+```
+
+```{r fig.width=6, fig.height=5}
+
+res0 <- simulateResiduals(model0)
+res1 <- simulateResiduals(model1)
+res2 <- simulateResiduals(model2)
+res3 <- simulateResiduals(model3)
+
+
+plot(res0)
+plot(res1)
+plot(res2)
+plot(res3)
+```
+
