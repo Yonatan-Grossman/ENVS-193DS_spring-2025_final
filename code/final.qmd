@@ -114,6 +114,9 @@ table
 ### e.
 
 ```{r}
+
+nest_boxes$season <- as.factor(nest_boxes$season)
+
 model0 <- glm(
   sp ~ 1,
   data = nest_boxes,
@@ -177,21 +180,29 @@ The best model as determined by Akaike's Information Criterion (AIC) was the sat
 ```{r}
 nest_boxes$predicted.sp <- predict(model1, type = "response")
 
-nest_boxes$season <- as.factor(nest_boxes$season)
+predictions <- predict(model1, newdata = nest_boxes, type = "link", se.fit = TRUE)
+
+fit <- predictions$fit
+se <- predictions$se.fit
+
+nest_boxes$fit <- fit
+nest_boxes$ci_lower_pre <- fit - 1.96 * se
+nest_boxes$ci_upper_pre <- fit + 1.96 * se
 
 
-ci_lower <- ci(nest_boxes$predicted.sp)[2]
-ci_upper <- ci(nest_boxes$predicted.sp)[3]
+nest_boxes$predicted.sp <- plogis(fit)
+nest_boxes$ci.lower <- plogis(nest_boxes$ci_lower_pre)
+nest_boxes$ci.upper <- plogis(nest_boxes$ci_upper_pre)
+
+
 
 ggplot(nest_boxes,
        aes(x = edge.distance,
            y = predicted.sp,
            color = season)) +
   geom_line() +
-  geom_ribbon(
-    aes
-    (ymin=ci_lower,
-      ymax=ci_upper),
-    fill="blue", alpha=0.2)
+  geom_ribbon(aes(ymin=ci.upper, ymax=ci.upper) ,fill= season, alpha=0.2) +
+  scale_color_manual(values = c("2016" = "green", "2019" = "cornflowerblue")) +
+  scale_fill_manual(values = c("2016" = "green", "2019" = "cornflowerblue"))
 ```
 
