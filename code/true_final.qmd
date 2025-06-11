@@ -1,8 +1,26 @@
 ---
-title: "193DS_spring_2025_final"
+title: "ENV S 193DS spring final project"
+author: "Yonatan Grossman"
+format: html
+date: 6/11/25
+toc: true
 ---
 
 https://github.com/Yonatan-Grossman/ENVS-193DS_spring-2025_final
+
+```{r}
+
+library(tidyverse) #loading in packages
+library(janitor)
+library(scales)
+library(DHARMa)
+library(MuMIn)
+library(knitr)
+
+sst <- read.csv("../data/SST_update2023.csv") #read in the sea-temp data
+nest_boxes <- read.csv("../data/occdist.csv") #reading in the nest boxes data
+```
+
 
 # Problem 1
 
@@ -26,19 +44,6 @@ We also found a \[+/-, strength\] correlation between distance from headwater (k
 ### a.
 
 ```{r}
-
-library(tidyverse) #loading in packages
-library(janitor)
-library(scales)
-library(DHARMa)
-library(MuMIn)
-```
-
-
-```{r}
-
-sst <- read.csv("../data/SST_update2023.csv") #read in the data
-
 sst_clean <- sst %>%
   clean_names() %>% #cleaning the data names
   mutate(
@@ -86,10 +91,6 @@ ggplot(sst_clean, #data frame
 
 ### a.
 
-```{r}
-nest_boxes <- read.csv("../data/occdist.csv") #reading in the nest boxes data
-```
-
 The 1s and 0s are basically saying if the bird in that column used the box or not, so for the column labeled sp a 1 means a swift parrot used the box while a 0 means another species used the box/the box was empty, and for the cs column a 1 means a common starling used the box while a 0 means a common starling did not use the box
 
 ### b.
@@ -108,7 +109,7 @@ table <- data.frame( #making a dataframe
   edge.distance = c("", "X", "", "X"), #see above comment
   description = c("no predictors (null model)", "all predictors (saturated model)", "only season as predictor", "only distance to forest edge as predictor")) #describing the predictors in each model (there's 2 predictors so there's 4 possible combinations)
   
-table #output the table
+kable(table, align = c("c", "c", "c", "l")) #aligns the table to make it a little more readable
 ```
 
 ### e.
