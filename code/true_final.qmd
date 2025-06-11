@@ -12,7 +12,7 @@ My coworker used a Pearson's r test in part 1, as it tests for correlation. They
 
 ### b.
 
-Two things they should have included are the degrees of freedom and the F-statistic. The F-statistic is the main output of an ANOVA, and it shows the ratio of variance between group means to the variance within group means. In this case, since the test rejected the null hypothesis, the F-statistic would probably be high and indicate that the difference in the mean nitrogen load (kg year⁻¹) of each of the groups (urban land, etc) was larger than the difference within each of those groups, with a higher F-statistic meaning the average nitrogen load varies much less within groups compared to how those groups compare to each other. Knowing the F-statistic allows us to better we can understand how different the means of the groups are. The degrees of freedom allow the reader to better understand how much information was used in the ANOVA and know the rough shape of the F-distribution. In this case, a higher df means more of each source was sampled, so they would have more data points to work with.
+Two things they should have included are the degrees of freedom and the F-statistic. The F-statistic is the main output of an ANOVA, and it shows the ratio of variance between group means to the variance within group means. In this case, since the test rejected the null hypothesis, the F-statistic would probably be high and indicate that the difference in the mean nitrogen load (kg year⁻¹) of each of the groups (urban land, etc) was larger than the difference within each of those groups, with a higher F-statistic meaning the average nitrogen load varies much less within groups compared to how those groups compare to each other. Knowing the F-statistic allows us to better we can understand how different the means of the groups are. The degrees of freedom allow the reader to better understand how much information was used in the ANOVA and know the rough shape of the F-distribution. In this case, a higher df means more locations of each source type were sampled, so they would have more data points to work with.
 
 ### c.
 
@@ -87,59 +87,60 @@ ggplot(sst_clean, #data frame
 ### a.
 
 ```{r}
-nest_boxes <- read.csv("../data/occdist.csv")
+nest_boxes <- read.csv("../data/occdist.csv") #reading in the nest boxes data
 ```
 
 The 1s and 0s are basically saying if the bird in that column used the box or not, so for the column labeled sp a 1 means a swift parrot used the box while a 0 means another species used the box/the box was empty, and for the cs column a 1 means a common starling used the box while a 0 means a common starling did not use the box
 
 ### b.
 
-this study is talking about nest boxes as a conservation tool, and while the common starling and the tree martin are both common animals, the swift parrot is critically endangered and therefor is actually in need of the nest boxes to help it. The boxes are also specifically designed to be the most useful for the parrots as the parrots are very selective about where they nest and the boxes were designed with the parrots' preferred parameters in mind.
+This study is talking about nest boxes as a conservation tool, and while the common starling and the tree martin are both common animals, the swift parrot is critically endangered and therefor is actually in need of the nest boxes to help it. The boxes are also specifically designed to be the most useful for the parrots as the parrots are very selective about where they nest and the boxes were designed with the parrots' preferred parameters in mind.
 
 ### c.
-Season in this case refers to the summer breeding seasons of 2016 and 2019. The main difference is that the boxes were set up in 2016 before the breeding season and then left there, so in the 2019 breeding season the boxes were already there.
+Season in this case refers to the summer breeding seasons of 2016 and 2019. The main difference is that the boxes were set up in 2016 before the breeding season and then left there, so in the 2019 breeding season the boxes were already there for a few years instead of being new for the birds to find.
 
 ### d.
 
 ```{r}
-table <- data.frame(
-  model.number = c(1, 2, 3, 4),
-  season = c("", "X", "X", ""),
-  distance.to.forest.edge = c("", "X", "", "X"),
-  model.description = c("no predictors (null model)", "all predictors (saturated model)", "only season as predictor", "only distance to forest edge as predictor"))
+table <- data.frame( #making a dataframe
+  model.number = c(1, 2, 3, 4), #adding a model number column
+  season = c("", "X", "X", ""), #checking off which predictors will be in each model
+  distance.to.forest.edge = c("", "X", "", "X"), #see above comment
+  model.description = c("no predictors (null model)", "all predictors (saturated model)", "only season as predictor", "only distance to forest edge as predictor")) #describing the predictors in each model (there's 2 predictors so there's 4 possible combinations)
   
-table
+table #output the table
 ```
 
 ### e.
 
-```{r}
+```{r, results='hide'}
 
-nest_boxes$season <- as.factor(nest_boxes$season)
+nest_boxes$season <- as.factor(nest_boxes$season) #turning the season column to a factor or it will treat it as continuous data and mess stuff up
 
-model0 <- glm(
-  sp ~ 1,
-  data = nest_boxes,
-  family = binomial
+model0 <- glm( #model 0 (null model)
+  sp ~ 1, #what predictors to use (none)
+  data = nest_boxes, #dataset
+  family = binomial #the data is binomial (just 1s and 0s)
 )
 
 
-model1 <- glm(
-  sp ~ edge.distance + season,
-  data = nest_boxes,
-  family = binomial
+model1 <- glm( #model1 (saturated model)
+  sp ~ edge.distance + season, #which predictors to use (both)
+  data = nest_boxes, #where's the data from
+  family = binomial #the data is binomial (just 1s and 0s)
 )
+
 
 
 model2 <- glm(
-  sp ~ season,
+  sp ~ season, #just season as the predictor
   data = nest_boxes,
   family = binomial
 )
 
 
 model3 <- glm(
-  sp ~ edge.distance, 
+  sp ~ edge.distance, #just edge distance as predictor
   data = nest_boxes,
   family = binomial
 )
@@ -148,15 +149,15 @@ model3 <- glm(
 
 ### f.
 
-```{r fig.width=6, fig.height=5}
+```{r fig.width=6, fig.height=6, fig.width= 7}
 
-res0 <- simulateResiduals(model0)
+res0 <- simulateResiduals(model0) #simulate residuals
 res1 <- simulateResiduals(model1)
 res2 <- simulateResiduals(model2)
 res3 <- simulateResiduals(model3)
 
 
-plot(res0)
+plot(res0) #plots diagnostic plots for the models
 plot(res1)
 plot(res2)
 plot(res3)
@@ -165,54 +166,66 @@ plot(res3)
 ### g.
 
 ```{r}
-AICc(
+AICc( #uses Akaike's Information Criterion on the models
   model0,
   model1,
   model2,
   model3
 ) |> 
-  arrange(AICc)
+  arrange(AICc) #sorts the results in acending order
 ```
-The best model as determined by Akaike's Information Criterion (AIC) was the saturated model, which used both season and distance to forest edge as the predictors (AICc 226.3133)
+The best model as determined by Akaike's Information Criterion (AIC) was the saturated model, which used both season and distance to forest edge as the predictors for swift parrot occupancy (AICc 226.3133)
 
 ### h.
 
 ```{r}
-graph_prediction <- expand.grid(edge.distance = seq(0, 1200, by = 1), season = unique(nest_boxes$season))
+graph_prediction <- expand.grid(edge.distance = seq(0, 1200, by = 1), season = unique(nest_boxes$season)) #sets a new dataframe for the predictions and extends it out to 1200 for edge distance so as to predict beyond the scope of the data
 
 
-predictions <- predict(model1, newdata = graph_prediction, type = "link", se.fit = TRUE)
+predictions <- predict(model1, newdata = graph_prediction, type = "link", se.fit = TRUE) #generates predictions based on the logit scale using model1 (the saturated model) and gets the standard error of the fit
 
-fit <- predictions$fit
-se <- predictions$se.fit
+fit <- predictions$fit #gets the predicted values
+se <- predictions$se.fit #and their standard error
 
-graph_prediction$fit <- fit
-graph_prediction$ci_lower_pre <- fit - 1.96 * se
-graph_prediction$ci_upper_pre <- fit + 1.96 * se
+graph_prediction$fit <- fit #adding a new column to the graph_predictions data frame for the predicted values
+graph_prediction$ci_lower_pre <- fit - 1.96 * se #adding a new column to the data frame for the lower bound of the ci
+graph_prediction$ci_upper_pre <- fit + 1.96 * se #adding an upper ci column
 
 
-graph_prediction$predicted.sp <- plogis(fit)
+graph_prediction$predicted.sp <- plogis(fit) #changing all the values from the logit to the probability scale
 graph_prediction$ci.lower <- plogis(graph_prediction$ci_lower_pre)
 graph_prediction$ci.upper <- plogis(graph_prediction$ci_upper_pre)
 
 
 
-ggplot(graph_prediction,
-       aes(x = edge.distance,
+ggplot(graph_prediction, #uses data from graph_prediction
+       aes(x = edge.distance, #determines the x and y axes
            y = predicted.sp,
-           color = season)) +
-  geom_line(size = 1.2) +
-  geom_jitter(data = nest_boxes, aes(y = sp, color = season, shape = season), height = .04, width = 0) +
-  geom_ribbon(aes(ymin=ci.lower, ymax=ci.upper, fill = season), alpha=0.2) +
-  scale_color_manual(values = c("2016" = "green2", "2019" = "navy")) +
-  scale_fill_manual(values = c("2016" = "darkgreen", "2019" = "cornflowerblue")) +
-  scale_shape_manual(values = c("2016" = 17, "2019" = 19)) +
-  xlab("Distance from edge of the forest (m)") +
-  ylab("Probability that a box is occupied by a swift parrot") +
-  theme_bw() +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
-  theme(legend.position = c(0.8, 0.7)) +
-  labs(color = "Season", fill = "Season", shape = "Season")
+           color = season)) + #color by season
+  geom_line(linewidth = 1.2) + #makes a line that follows the prediction data
+  geom_jitter(data = nest_boxes, #using data from the original dataset
+              aes(y = sp, #using the binary catagorical data on the y axis
+                  color = season, #color and shape by season to distinguish the data
+                  shape = season),
+              height = .04, #jitter by height for visibility
+              width = 0) + #don't jitter at all on the x axis for accuracy
+  geom_ribbon( #add a ribbon for the 95% ci
+    aes(ymin=ci.lower, #sets the upper and lower bounds of the ci ribbon
+        ymax=ci.upper,
+        fill = season), #fill color by season
+    alpha=0.2) + #transparency factor
+  scale_color_manual(
+    values = c("2016" = "green2", "2019" = "navy")) + #choosing colors for the center lines and jitterplot
+  scale_fill_manual(
+    values = c("2016" = "darkgreen", "2019" = "cornflowerblue")) + #choosing color for the ribbons
+  scale_shape_manual(
+    values = c("2016" = 17, "2019" = 19)) + #choosing shapes for the jitterplot
+  xlab("Distance from edge of the forest (m)") + #x-axis label
+  ylab("Probability that a box is occupied by a swift parrot") + #y-axis label
+  theme_bw() + #theme
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) + #remove the gridlines
+  theme(legend.position = c(0.8, 0.7)) + #mode the legend
+  labs(color = "Season", fill = "Season", shape = "Season") #rename the legend and solidify all in one space
 ```
 ### i.
 
@@ -224,28 +237,28 @@ Points represent actual observations of swift parrots inhabiting the nest boxes 
 ### j.
 
 ```{r}
-edge_calculation <- expand.grid(edge.distance = c(0, 900), season = c("2016", "2019"))
+edge_calculation <- expand.grid(edge.distance = c(0, 900), season = c("2016", "2019")) #making a grid that's just 2 columns, one with the seasons and one with the distances 0 and 900, and with each combination of values.
 
-predictions2 <- predict(model1, newdata = edge_calculation, type = "link", se.fit = TRUE)
+predictions2 <- predict(model1, newdata = edge_calculation, type = "link", se.fit = TRUE) #predict values from the saturated model for the new data frame, with the standard error included.
 
-fit2 <- predictions2$fit
-se2 <- predictions2$se.fit
+fit2 <- predictions2$fit #getting th predicted values
+se2 <- predictions2$se.fit #and their standard errors
 
 
-edge_calculation$predicted_prob <- plogis(fit2)
+edge_calculation$predicted_prob <- plogis(fit2) #changing values from the logit scale to the probability scale and then adding them as columns in the data frame
 edge_calculation$ci_lower <- plogis(fit2 - 1.96 * se2)
 edge_calculation$ci_upper <- plogis(fit2 + 1.96 * se2)
 
-edge_calculation
+edge_calculation #output the data frame
 ```
 
 ### k.
 
-I found that the probability of nest occupancy for swift parrots decreases as you get further away from the forest's edge, and further decreased from the 2016 to the 2019 season (new boxes vs. established boxes). These numbers are backed up by the calculated probabilities of swift parrot occupation in nest boxes 0 and 900 meters from the forest edge in 2016 (0.481 and 0.125 respectively) and 2019 (0.298 and 0.061). These data show that nest boxes are more helpful to swift parrots when they're closer to the forest edge, and also that newer boxes are much more useful than established boxes (since the nest box occupancy was much higher in 2016 when the boxes were first laid out). In the paper you can see that the common starlings tend to avoid the center of the forest even more than the swift parrots, but have substantially higher occupancy in boxes near the forests' edge for established boxes (2019 season), whereas the tree martin tends to dominate the spaces away from the forests' edge, and especially migrate to established boxes further in the forest (much higher occupancy away from the forest edge in the 2019 season). This suggests that, although Swift Parrots have the advantage at occupying new boxes at the edge of the forest, the tree martins out-compete them in the forests interior and the common starlings out-compete them once the boxes have been established, which accounts for the trend of swift parrot occupancy decreasing the further in the forest you go and the more time passes.
+I found that the probability of nest occupancy for swift parrots decreases as you get further away from the forest's edge, and further decreased from the 2016 to the 2019 season (new boxes vs. established boxes). These numbers are backed up by the calculated probabilities of swift parrot occupation in nest boxes at 0 and 900 meters from the forest edge in 2016 (0.481 and 0.125 respectively) and 2019 (0.298 and 0.061). These data show that nest boxes are more helpful to swift parrots when they're closer to the forest edge, and also that newer boxes are much more useful than established boxes (since the nest box occupancy was much higher in 2016 when the boxes were first laid out). The paper made models for the competing birds which show that the common starlings tend to avoid the center of the forest even more than the swift parrots, but have substantially higher occupancy in boxes near the forests' edge for established boxes (2019 season), whereas the tree martin tends to dominate the spaces away from the forests' edge, and especially migrate to established boxes further in the forest (much higher occupancy away from the forest edge in the 2019 season)(Stojanovic et al. 2021). This suggests that, although swift parrots have the advantage at occupying new boxes at the edge of the forest, the tree martins out-compete them in the forests' interior and the common starlings out-compete them once the boxes have been established, which accounts for the trend of swift parrot occupancy decreasing the further in the forest you go and the more time passes.
 
 # Problem 4.
 
-a. I would say that the main ways that the visualizations from homeworks 2 and 3 differ from each other is the medium used to represent them, the context given, and accuracy. In homework 2 the visualization was represented just on the screen, generated by r and with a generic box and jitter plot (with custom colors and shapes), while the affective visualization I made for homework 3 was made out of food and cans and boxes, and I took a photo of it on my patio using a lamp. In addition to the medium being different, the charts r creates come with axis and a legend while the affective visualization had neither of those, and was also slightly less accurate since I can't put the boxplot lines out of cardboard down as accurately and precisely as a computer can.
+a. I would say that the main ways that the visualizations from homeworks 2 and 3 differ from each other is the medium used to represent them, the context given, and accuracy. In homework 2 the visualization was represented just on the screen, generated by r and with a generic box and jitter plot (with custom colors and shapes), while the affective visualization I made for homework 3 was made out of food and cans and boxes. In addition to the medium being different, the charts r creates come with axis and a legend while the affective visualization had neither of those, and was also slightly less accurate since I can't put the boxplot lines out of cardboard down as accurately and precisely as a computer can.
   I think the similarities are clear in that the underlying data is close to the same so they just visually look very similar. I can see the homework 2 box and jitter plot pretty clearly in the homework 3 affective visualization, even though new data had been added by then.
   The trends were pretty similar between visualizations, and they were mostly that on days when I was stressed there was a much smaller variety of times I ate, whereas on days where I wasn't stressed there was a much larger range of values.
   The two biggest pieces of feedback I got were to take a photo from a higher angle and to clarify which side was the stressed side. I fixed this by standing on a chair to get a better angle, and to add some school supplies next to the boxplot showing the data from when I was stressed.
