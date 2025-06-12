@@ -91,7 +91,7 @@ ggplot(sst_clean, #data frame
 
 ### a.
 
-The 1s and 0s are basically saying if the bird in that column used the box or not, so for the column labeled sp a 1 means a swift parrot used the box while a 0 means another species used the box/the box was empty, and for the cs column a 1 means a common starling used the box while a 0 means a common starling did not use the box
+The 1s and 0s are basically saying if the bird in that column used the box or not, so for the column labeled sp a 1 means a swift parrot used the box while a 0 means another species used the box/the box was empty, and for the cs column a 1 means a common starling used the box while a 0 means a common starling did not use the box.
 
 ### b.
 
