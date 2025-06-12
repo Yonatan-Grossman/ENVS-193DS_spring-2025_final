@@ -17,8 +17,8 @@ library(DHARMa)
 library(MuMIn)
 library(knitr)
 
-sst <- read.csv("data/SST_update2023.csv") #read in the sea-temp data
-nest_boxes <- read.csv("data/occdist.csv") #reading in the nest boxes data
+sst <- read.csv("../data/SST_update2023.csv") #read in the sea-temp data
+nest_boxes <- read.csv("../data/occdist.csv") #reading in the nest boxes data
 ```
 
 
